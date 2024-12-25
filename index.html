@@ -14,7 +14,7 @@
 
         body {
             background: #e8f5e9;
-            margin: 8vw;
+            margin: 40px;
         }
 
         .password-screen {
@@ -55,16 +55,6 @@
 
         .feedback.show {
             opacity: 1;
-        }
-
-        .shake {
-            animation: shake 0.5s;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
         }
 
         input {
@@ -148,78 +138,39 @@
         </form>
     </div>
 
-    <div class="gallery">
-        <div class="gallery-item">
-            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
-        </div>
-        <div class="gallery-item">
-            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
-        </div>
-        <div class="gallery-item">
-            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
-        </div>
-        <div class="gallery-item message">
-            Thank you for being the most amazing mom in the world
-        </div>
-        <div class="gallery-item">
-            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
-        </div>
-        <div class="gallery-item">
-            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
-        </div>
-        <div class="gallery-item">
-            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
-        </div>
-        <div class="gallery-item message">
-            Your love and guidance light up my life every single day
-        </div>
-        <div class="gallery-item">
-            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
-        </div>
-        <div class="gallery-item">
-            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
-        </div>
-        <div class="gallery-item message">
-            You make everything better just by being you
-        </div>
-        <div class="gallery-item">
-            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
-        </div>
-    </div>
+    <div class="gallery" id="gallery"></div>
 
     <script>
         const PASSWORD = 'faith';
+        const MESSAGES = [
+            "Thank you for being the most amazing mom in the world",
+            "Your love and guidance light up my life every single day",
+            "You make everything better just by being you",
+            "Your strength and grace inspire me every day",
+            "Thank you for always believing in me",
+            "Your smile brightens my darkest days",
+            "You're not just my mom, you're my best friend",
+            "Your love knows no bounds"
+        ];
+
         const passwordScreen = document.getElementById('passwordScreen');
         const passwordForm = document.getElementById('passwordForm');
         const passwordInput = document.getElementById('passwordInput');
-
         const feedback = document.getElementById('feedback');
-        
+        const gallery = document.getElementById('gallery');
+
+        // Handle password submission
         passwordForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            // Remove previous shake animation
-            passwordInput.classList.remove('shake');
-            
-            // Check password
             if (passwordInput.value === PASSWORD) {
                 console.log('Correct password entered!');
                 passwordScreen.classList.add('hidden');
+                loadGallery();
             } else {
                 console.log('Incorrect password attempt');
                 passwordInput.value = '';
                 passwordInput.placeholder = 'Try again';
-                
-                // Show error feedback
                 feedback.classList.add('show');
-                
-                // Add shake animation
-                passwordInput.classList.add('shake');
-                
-                // Remove shake class after animation completes
-                setTimeout(() => {
-                    passwordInput.classList.remove('shake');
-                }, 500);
             }
         });
 
@@ -227,6 +178,61 @@
         passwordInput.addEventListener('input', () => {
             feedback.classList.remove('show');
         });
+
+        // Function to shuffle array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Function to load and display gallery
+        async function loadGallery() {
+            try {
+                // Get list of photos from the photos directory
+                const response = await fetch('photos/');
+                const files = await response.text();
+                
+                // Parse HTML response to get image files
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(files, 'text/html');
+                const imageFiles = Array.from(doc.querySelectorAll('a'))
+                    .map(a => a.href)
+                    .filter(href => href.match(/\.(jpg|jpeg|png|gif)$/i));
+
+                // Create array of all items (photos and messages)
+                const items = [
+                    ...imageFiles.map(src => ({ type: 'photo', content: src })),
+                    ...MESSAGES.map(msg => ({ type: 'message', content: msg }))
+                ];
+
+                // Shuffle items
+                const shuffledItems = shuffleArray(items);
+
+                // Clear existing gallery content
+                gallery.innerHTML = '';
+
+                // Add items to gallery
+                shuffledItems.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'gallery-item';
+                    
+                    if (item.type === 'photo') {
+                        div.innerHTML = `<img src="${item.content}" class="photo" alt="Mom">`;
+                    } else {
+                        div.className += ' message';
+                        div.textContent = item.content;
+                    }
+                    
+                    gallery.appendChild(div);
+                });
+            } catch (error) {
+                console.error('Error loading gallery:', error);
+                gallery.innerHTML = '<p>Error loading gallery. Please refresh the page.</p>';
+            }
+        }
     </script>
 </body>
 </html>
