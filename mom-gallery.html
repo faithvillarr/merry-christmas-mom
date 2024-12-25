@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Mom ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background: #e8f5e9;
+            margin: 8vw;
+        }
+
+        .password-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: opacity 0.5s;
+        }
+
+        .password-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .password-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .feedback {
+            color: #ff4444;
+            font-size: 14px;
+            height: 20px;
+            margin-top: -10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        input {
+            padding: 12px;
+            font-size: 18px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            width: 200px;
+            text-align: center;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 18px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border: 4px solid #4caf50;
+        }
+
+        .photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .message {
+            background: #4caf50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="password-screen" id="passwordScreen">
+        <form class="password-form" id="passwordForm">
+            <h1>Enter Password ❤️</h1>
+            <input type="text" id="passwordInput" placeholder="Password">
+            <div class="feedback" id="feedback">Incorrect password. Please try again.</div>
+            <button type="submit">Enter</button>
+        </form>
+    </div>
+
+    <div class="gallery">
+        <div class="gallery-item">
+            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
+        </div>
+        <div class="gallery-item">
+            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
+        </div>
+        <div class="gallery-item">
+            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
+        </div>
+        <div class="gallery-item message">
+            Thank you for being the most amazing mom in the world
+        </div>
+        <div class="gallery-item">
+            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
+        </div>
+        <div class="gallery-item">
+            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
+        </div>
+        <div class="gallery-item">
+            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
+        </div>
+        <div class="gallery-item message">
+            Your love and guidance light up my life every single day
+        </div>
+        <div class="gallery-item">
+            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
+        </div>
+        <div class="gallery-item">
+            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
+        </div>
+        <div class="gallery-item message">
+            You make everything better just by being you
+        </div>
+        <div class="gallery-item">
+            <img src="/api/placeholder/400/400" alt="Mom" class="photo">
+        </div>
+    </div>
+
+    <script>
+        const PASSWORD = 'faith';
+        const passwordScreen = document.getElementById('passwordScreen');
+        const passwordForm = document.getElementById('passwordForm');
+        const passwordInput = document.getElementById('passwordInput');
+
+        const feedback = document.getElementById('feedback');
+        
+        passwordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Remove previous shake animation
+            passwordInput.classList.remove('shake');
+            
+            // Check password
+            if (passwordInput.value === PASSWORD) {
+                console.log('Correct password entered!');
+                passwordScreen.classList.add('hidden');
+            } else {
+                console.log('Incorrect password attempt');
+                passwordInput.value = '';
+                passwordInput.placeholder = 'Try again';
+                
+                // Show error feedback
+                feedback.classList.add('show');
+                
+                // Add shake animation
+                passwordInput.classList.add('shake');
+                
+                // Remove shake class after animation completes
+                setTimeout(() => {
+                    passwordInput.classList.remove('shake');
+                }, 500);
+            }
+        });
+
+        // Hide feedback when user starts typing again
+        passwordInput.addEventListener('input', () => {
+            feedback.classList.remove('show');
+        });
+    </script>
+</body>
+</html>
