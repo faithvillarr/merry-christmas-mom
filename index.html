@@ -131,7 +131,7 @@
 <body>
     <div class="password-screen" id="passwordScreen">
         <form class="password-form" id="passwordForm">
-            <h1>Who has the bestest mom in the world? ❤️</h1>
+            <h1>Enter Password ❤️</h1>
             <input type="text" id="passwordInput" placeholder="Password">
             <div class="feedback" id="feedback">Incorrect password. Please try again.</div>
             <button type="submit">Enter</button>
@@ -145,7 +145,10 @@
         const MESSAGES = [
             "Thank you for being the most amazing mom in the world",
             "Your love and guidance light up my life every single day",
+            "You make everything better just by being you",
+            "Your strength and grace inspire me every day",
             "Thank you for always believing in me",
+            "Your smile brightens my darkest days",
             "You're not just my mom, you're my best friend",
             "Your love knows no bounds"
         ];
@@ -188,16 +191,12 @@
         // Function to load and display gallery
         async function loadGallery() {
             try {
-                // Get list of photos from the photos directory
-                const response = await fetch('photos/');
-                const files = await response.text();
-                
-                // Parse HTML response to get image files
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(files, 'text/html');
-                const imageFiles = Array.from(doc.querySelectorAll('a'))
-                    .map(a => a.href)
-                    .filter(href => href.match(/\.(jpg|jpeg|png|gif)$/i));
+                // List of photos (you'll need to manually update this array)
+                const imageFiles = [
+                    '/photos/photo1.jpg',
+                    '/photos/photo2.jpg',
+                    // Add all your photo filenames here
+                ];
 
                 // Create array of all items (photos and messages)
                 const items = [
