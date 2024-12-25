@@ -131,7 +131,7 @@
 <body>
     <div class="password-screen" id="passwordScreen">
         <form class="password-form" id="passwordForm">
-            <h1>Enter Password ❤️</h1>
+            <h1>Who has the bestest mom in the whole world? ❤️</h1>
             <input type="text" id="passwordInput" placeholder="Password">
             <div class="feedback" id="feedback">Incorrect password. Please try again.</div>
             <button type="submit">Enter</button>
@@ -144,13 +144,9 @@
         const PASSWORD = 'faith';
         const MESSAGES = [
             "Thank you for being the most amazing mom in the world",
-            "Your love and guidance light up my life every single day",
             "You make everything better just by being you",
-            "Your strength and grace inspire me every day",
             "Thank you for always believing in me",
-            "Your smile brightens my darkest days",
             "You're not just my mom, you're my best friend",
-            "Your love knows no bounds"
         ];
 
         const passwordScreen = document.getElementById('passwordScreen');
@@ -191,12 +187,29 @@
         // Function to load and display gallery
         async function loadGallery() {
             try {
-                // Get list of photos from our API endpoint
-                const response = await fetch('/api/photos');
-                const photoFiles = await response.json();
-                
-                // Create full URLs for the images
-                const imageFiles = photoFiles.map(filename => `/photos/${filename}`);
+                // Define your photo filenames directly
+                const imageFiles = [
+                    '/photos/IMG_0041.jpg', 
+                    '/photos/IMG_0067.jpg', 
+                    '/photos/IMG_0111.jpg', 
+                    '/photos/IMG_0883.jpg', 
+                    '/photos/IMG_1055.jpg', 
+                    '/photos/IMG_2290.jpg', 
+                    '/photos/IMG_3919.jpg', 
+                    '/photos/IMG_4075.JPG', 
+                    '/photos/IMG_4335.jpg', 
+                    '/photos/IMG_6128.jpg', 
+                    '/photos/IMG_6590.jpg', 
+                    '/photos/IMG_6647.jpg', 
+                    '/photos/IMG_7286.jpg', 
+                    '/photos/IMG_7524.jpg', 
+                    '/photos/IMG_7543.jpg', 
+                    '/photos/IMG_8074.jpg', 
+                    '/photos/IMG_8838.jpg', 
+                    '/photos/IMG_9279.jpg',
+                    '/photos/78E49D64-97EC-4C1B-9498-B750256C05A7.JPG', 
+                    '/photos/71468674358__679502CD-1CA9-46E4-8B36-B7AAD99A9B93.jpg'
+                ];
 
                 // Create array of all items (photos and messages)
                 const items = [
@@ -216,7 +229,14 @@
                     div.className = 'gallery-item';
                     
                     if (item.type === 'photo') {
-                        div.innerHTML = `<img src="${item.content}" class="photo" alt="Mom">`;
+                        const imgSrc = item.content;
+                        div.innerHTML = `
+                            <img 
+                                src="${imgSrc}" 
+                                class="photo" 
+                                alt="Failed to load: ${imgSrc}"
+                                onerror="console.error('Failed to load image:', this.src)"
+                            >`;
                     } else {
                         div.className += ' message';
                         div.textContent = item.content;
