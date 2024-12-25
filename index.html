@@ -191,29 +191,12 @@
         // Function to load and display gallery
         async function loadGallery() {
             try {
-                // List of photos (you'll need to manually update this array)
-                const imageFiles = [
-                    'public/photos/78E49D64-97EC-4C1B-9498-B750256C05A7.JPG',
-                    'public/photos/71468674358__679502CD-1CA9-46E4-8B36-B7AAD99A9B93.jpg',
-                    'public/photos/IMG_0041.jpg' ,
-                    'public/photos/IMG_0067.jpg' ,
-                    'public/photos/IMG_0111.jpg' ,
-                    'public/photos/IMG_0883.jpg' ,
-                    'public/photos/IMG_1055.jpg' ,
-                    'public/photos/IMG_2290.jpg' ,
-                    'public/photos/IMG_3919.jpg' ,
-                    'public/photos/IMG_4075.JPG' ,
-                    'public/photos/IMG_4335.jpg' ,
-                    'public/photos/IMG_6128.jpg' ,
-                    'public/photos/IMG_6590.jpg' ,
-                    'public/photos/IMG_6647.jpg' ,
-                    'public/photos/IMG_7286.jpg' ,
-                    'public/photos/IMG_7524.jpg' ,
-                    'public/photos/IMG_7543.jpg' ,
-                    'public/photos/IMG_8074.jpg' ,
-                    'public/photos/IMG_8838.jpg' ,
-                    'public/photos/IMG_9279.jpg' ,
-                ];'
+                // Get list of photos from our API endpoint
+                const response = await fetch('/api/photos');
+                const photoFiles = await response.json();
+                
+                // Create full URLs for the images
+                const imageFiles = photoFiles.map(filename => `/photos/${filename}`);
 
                 // Create array of all items (photos and messages)
                 const items = [
